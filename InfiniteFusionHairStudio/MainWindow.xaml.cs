@@ -1,6 +1,8 @@
 ﻿using InfiniteFusionHairStudio.Core;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,23 +10,30 @@ namespace InfiniteFusionHairStudio
 {
     public partial class MainWindow : Window
     {
+        private PreviewRenderer? _preview;
+        private HairLibrary? _hairLibrary;
+
+        private readonly List<SlotEditor> _slots = new();
+
         public MainWindow()
         {
             InitializeComponent();
+
+            _preview = new PreviewRenderer(PreviewBody, PreviewHair);
 
             string libraryPath = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
                 "Assets",
                 "Library");
 
-            var hairLibrary = new HairLibrary(libraryPath);
+            _hairLibrary = new HairLibrary(libraryPath);
 
-            SetupHairComboBox(ReplaceHairComboBox, hairLibrary);
+            SetupHairComboBox(ReplaceHairComboBox, _hairLibrary);
 
-            SetupHairComboBox(Slot1Hair, hairLibrary);
-            SetupHairComboBox(Slot2Hair, hairLibrary);
-            SetupHairComboBox(Slot3Hair, hairLibrary);
-            SetupHairComboBox(Slot4Hair, hairLibrary);
+            SetupHairComboBox(Slot1Hair, _hairLibrary);
+            SetupHairComboBox(Slot2Hair, _hairLibrary);
+            SetupHairComboBox(Slot3Hair, _hairLibrary);
+            SetupHairComboBox(Slot4Hair, _hairLibrary);
 
             string[] palettes =
             {
@@ -43,6 +52,20 @@ namespace InfiniteFusionHairStudio
             Slot2Color.SelectedIndex = 1;
             Slot3Color.SelectedIndex = 2;
             Slot4Color.SelectedIndex = 3;
+
+            _slots.Add(new SlotEditor(1, Slot1Selector, Slot1Hair, Slot1Color));
+            _slots.Add(new SlotEditor(2, Slot2Selector, Slot2Hair, Slot2Color));
+            _slots.Add(new SlotEditor(3, Slot3Selector, Slot3Hair, Slot3Color));
+            _slots.Add(new SlotEditor(4, Slot4Selector, Slot4Hair, Slot4Color));
+
+            foreach (var slot in _slots)
+            {
+                slot.Selector.Checked += ActiveSlotChanged;
+                slot.HairCombo.SelectionChanged += ActiveHairChanged;
+            }
+
+            LoadPreviewBody();
+            UpdatePreviewHair();
         }
 
         private void SetupHairComboBox(ComboBox comboBox, HairLibrary library)
@@ -50,6 +73,49 @@ namespace InfiniteFusionHairStudio
             comboBox.ItemsSource = library.Hairstyles;
             comboBox.DisplayMemberPath = "Name";
             comboBox.SelectedIndex = 0;
+        }
+
+        private SlotEditor GetActiveSlot()
+        {
+            return _slots.First(s => s.Selector.IsChecked == true);
+        }
+
+        private void LoadPreviewBody()
+        {
+            string bodyPath = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "Assets",
+                "Preview",
+                "trainer_5.png");
+
+            _preview?.SetBody(bodyPath);
+        }
+
+        private void UpdatePreviewHair()
+        {
+            var active = GetActiveSlot();
+
+            // Update the title automatically
+            PreviewGroup.Header = $"Live Preview — Slot {active.SlotNumber}";
+
+            if (active.HairCombo.SelectedItem is not HairAsset hair)
+                return;
+
+            string hairPath = Path.Combine(
+                hair.FolderPath,
+                $"hair_trainer_{active.SlotNumber}_{hair.FilePrefix}.png");
+
+            _preview?.SetHair(hairPath);
+        }
+
+        private void ActiveSlotChanged(object? sender, RoutedEventArgs e)
+        {
+            UpdatePreviewHair();
+        }
+
+        private void ActiveHairChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            UpdatePreviewHair();
         }
 
         private void ExportButton_Click(object sender, RoutedEventArgs e)
