@@ -8,10 +8,7 @@ namespace InfiniteFusionHairStudio.Core
         public static void Export(
             string exportsFolder,
             HairAsset replaceHair,
-            ExportSlot slot1,
-            ExportSlot slot2,
-            ExportSlot slot3,
-            ExportSlot slot4)
+            ExportSlot[] slots)
         {
             Directory.CreateDirectory(exportsFolder);
 
@@ -27,10 +24,14 @@ namespace InfiniteFusionHairStudio.Core
             using ZipArchive archive =
                 ZipFile.Open(zipPath, ZipArchiveMode.Create);
 
-            ExportSlot(archive, replaceHair, slot1, 1);
-            ExportSlot(archive, replaceHair, slot2, 2);
-            ExportSlot(archive, replaceHair, slot3, 3);
-            ExportSlot(archive, replaceHair, slot4, 4);
+            for (int i = 0; i < slots.Length; i++)
+            {
+                ExportSlot(
+                    archive,
+                    replaceHair,
+                    slots[i],
+                    i + 1);
+            }
         }
 
         private static void ExportSlot(
@@ -41,20 +42,16 @@ namespace InfiniteFusionHairStudio.Core
         {
             AddFile(
                 archive,
-
                 Path.Combine(
                     slot.Hair.FolderPath,
                     $"hair_{slotNumber}_{slot.Hair.FilePrefix}.png"),
-
                 $"hair_{slotNumber}_{replaceHair.FilePrefix}.png");
 
             AddFile(
                 archive,
-
                 Path.Combine(
                     slot.Hair.FolderPath,
                     $"hair_trainer_{slotNumber}_{slot.Hair.FilePrefix}.png"),
-
                 $"hair_trainer_{slotNumber}_{replaceHair.FilePrefix}.png");
         }
 
@@ -67,11 +64,8 @@ namespace InfiniteFusionHairStudio.Core
                 zipFileName,
                 CompressionLevel.Optimal);
 
-            using var input =
-                File.OpenRead(sourceFile);
-
-            using var output =
-                entry.Open();
+            using var input = File.OpenRead(sourceFile);
+            using var output = entry.Open();
 
             input.CopyTo(output);
         }

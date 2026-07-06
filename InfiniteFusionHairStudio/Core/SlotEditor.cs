@@ -8,20 +8,12 @@ namespace InfiniteFusionHairStudio.Core
 
         public RadioButton Selector { get; }
 
-        public ComboBox HairCombo { get; }
-
-        public ComboBox PaletteCombo { get; }
-
         public SlotEditor(
             int slotNumber,
-            RadioButton selector,
-            ComboBox hairCombo,
-            ComboBox paletteCombo)
+            RadioButton selector)
         {
             SlotNumber = slotNumber;
             Selector = selector;
-            HairCombo = hairCombo;
-            PaletteCombo = paletteCombo;
         }
     }
 }
