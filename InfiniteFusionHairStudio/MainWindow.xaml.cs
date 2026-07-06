@@ -16,15 +16,17 @@ namespace InfiniteFusionHairStudio
 
         private readonly List<SlotEditor> _slots = new();
 
-        // Existing export slots still use this.
-        private readonly string[] _palettes =
-        {
-            "Brown",
-            "Blonde",
-            "Black",
-            "Purple"
-        };
+        private readonly ExportSlot[] _exportSlots =
+{
+    new ExportSlot(),
+    new ExportSlot(),
+    new ExportSlot(),
+    new ExportSlot()
+};
 
+        private bool _loadingSlot;
+
+        
 
 
         // New Composer color list.
@@ -75,45 +77,37 @@ namespace InfiniteFusionHairStudio
 
             _composerLibrary = new ComposerLibrary(composerPath);
 
-            SetupHairComboBox(ReplaceHairComboBox, _hairLibrary);
+            HairPart baldBangs = _composerLibrary.Bangs.First(p => p.Name == "Bald");
+            HairPart baldBase = _composerLibrary.Base.First(p => p.Name == "Bald");
+            HairPart baldBack = _composerLibrary.Back.First(p => p.Name == "Bald");
 
-            SetupHairComboBox(Slot1Hair, _hairLibrary);
-            SetupHairComboBox(Slot2Hair, _hairLibrary);
-            SetupHairComboBox(Slot3Hair, _hairLibrary);
-            SetupHairComboBox(Slot4Hair, _hairLibrary);
+            foreach (ExportSlot slot in _exportSlots)
+            {
+                slot.Bangs = baldBangs;
+                slot.Base = baldBase;
+                slot.Back = baldBack;
+            }
 
-            Slot1Color.ItemsSource = _palettes;
-            Slot2Color.ItemsSource = _palettes;
-            Slot3Color.ItemsSource = _palettes;
-            Slot4Color.ItemsSource = _palettes;
+            ReplaceHairComboBox.ItemsSource = _hairLibrary.Hairstyles;
+            ReplaceHairComboBox.DisplayMemberPath = "Name";
+            ReplaceHairComboBox.SelectedIndex = 0;
 
-            Slot1Color.SelectedIndex = 0;
-            Slot2Color.SelectedIndex = 1;
-            Slot3Color.SelectedIndex = 2;
-            Slot4Color.SelectedIndex = 3;
+
 
             SetupComposer();
 
-            _slots.Add(new SlotEditor(1, Slot1Selector, Slot1Hair, Slot1Color));
-            _slots.Add(new SlotEditor(2, Slot2Selector, Slot2Hair, Slot2Color));
-            _slots.Add(new SlotEditor(3, Slot3Selector, Slot3Hair, Slot3Color));
-            _slots.Add(new SlotEditor(4, Slot4Selector, Slot4Hair, Slot4Color));
+            _slots.Add(new SlotEditor(1, Slot1Selector));
+            _slots.Add(new SlotEditor(2, Slot2Selector));
+            _slots.Add(new SlotEditor(3, Slot3Selector));
+            _slots.Add(new SlotEditor(4, Slot4Selector));
 
             foreach (var slot in _slots)
             {
                 slot.Selector.Checked += ActiveSlotChanged;
-                slot.HairCombo.SelectionChanged += ActiveHairChanged;
             }
 
             LoadPreviewBody();
             UpdatePreviewHair();
-        }
-
-        private void SetupHairComboBox(ComboBox comboBox, HairLibrary library)
-        {
-            comboBox.ItemsSource = library.Hairstyles;
-            comboBox.DisplayMemberPath = "Name";
-            comboBox.SelectedIndex = 0;
         }
 
         private void SetupComposer()
@@ -176,6 +170,12 @@ namespace InfiniteFusionHairStudio
 
         private SlotEditor GetActiveSlot() => _slots.First(s => s.Selector.IsChecked == true);
 
+        private ExportSlot GetActiveExportSlot()
+        {
+            return _exportSlots[GetActiveSlot().SlotNumber - 1];
+        }
+
+
         private void LoadPreviewBody()
         {
             string bodyPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Assets","Preview","trainer_5.png");
@@ -221,35 +221,60 @@ namespace InfiniteFusionHairStudio
             }
         }
 
-        private void ComposerSelectionChanged(object? sender, SelectionChangedEventArgs e) => UpdatePreviewHair();
-        private void ActiveSlotChanged(object? sender, RoutedEventArgs e) => UpdatePreviewHair();
-        private void ActiveHairChanged(object? sender, SelectionChangedEventArgs e) => UpdatePreviewHair();
+        private void ComposerSelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if (_loadingSlot)
+                return;
+            ExportSlot slot = GetActiveExportSlot();
+
+            slot.Bangs = (HairPart?)ComposerBangs.SelectedItem;
+            slot.Base = (HairPart?)ComposerBase.SelectedItem;
+            slot.Back = (HairPart?)ComposerBack.SelectedItem;
+
+            slot.BangsColor = (HairColor)ComposerBangsColor.SelectedItem;
+            slot.BaseColor = (HairColor)ComposerBaseColor.SelectedItem;
+            slot.BackColor = (HairColor)ComposerBackColor.SelectedItem;
+
+            slot.BangsShade = (HairShade)ComposerBangsShade.SelectedItem;
+            slot.BaseShade = (HairShade)ComposerBaseShade.SelectedItem;
+            slot.BackShade = (HairShade)ComposerBackShade.SelectedItem;
+
+            UpdatePreviewHair();
+        }
+        private void ActiveSlotChanged(object? sender, RoutedEventArgs e)
+        {
+            _loadingSlot = true;
+
+            try
+            {
+                ExportSlot slot = GetActiveExportSlot();
+
+                if (_composerLibrary != null)
+                {
+                    ComposerBangs.SelectedItem = slot.Bangs;
+                    ComposerBase.SelectedItem = slot.Base;
+                    ComposerBack.SelectedItem = slot.Back;
+                }
+
+                ComposerBangsColor.SelectedItem = slot.BangsColor;
+                ComposerBaseColor.SelectedItem = slot.BaseColor;
+                ComposerBackColor.SelectedItem = slot.BackColor;
+
+                ComposerBangsShade.SelectedItem = slot.BangsShade;
+                ComposerBaseShade.SelectedItem = slot.BaseShade;
+                ComposerBackShade.SelectedItem = slot.BackShade;
+            }
+            finally
+            {
+                _loadingSlot = false;
+            }
+
+            UpdatePreviewHair();
+        }
 
         private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
-            var slot1 = new ExportSlot
-            {
-                Hair = (HairAsset)Slot1Hair.SelectedItem,
-                PaletteIndex = Slot1Color.SelectedIndex
-            };
-
-            var slot2 = new ExportSlot
-            {
-                Hair = (HairAsset)Slot2Hair.SelectedItem,
-                PaletteIndex = Slot2Color.SelectedIndex
-            };
-
-            var slot3 = new ExportSlot
-            {
-                Hair = (HairAsset)Slot3Hair.SelectedItem,
-                PaletteIndex = Slot3Color.SelectedIndex
-            };
-
-            var slot4 = new ExportSlot
-            {
-                Hair = (HairAsset)Slot4Hair.SelectedItem,
-                PaletteIndex = Slot4Color.SelectedIndex
-            };
+            
 
             var replaceHair = (HairAsset)ReplaceHairComboBox.SelectedItem;
 
@@ -258,12 +283,9 @@ namespace InfiniteFusionHairStudio
                 "Exports");
 
             Exporter.Export(
-                exportsFolder,
-                replaceHair,
-                slot1,
-                slot2,
-                slot3,
-                slot4);
+    exportsFolder,
+    replaceHair,
+    _exportSlots);
 
             MessageBox.Show(
                 $"Export complete!\n\nSaved to:\n{exportsFolder}");

@@ -29,10 +29,11 @@
                 <ComboBox x:Name="ReplaceHairComboBox"
                           Margin="0,5,0,20"/>
 
-                <!-- Slot 1 -->
+                <TextBlock Text="Custom Hairstyle Slots"
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
 
                 <GroupBox Margin="0,0,0,10">
-
                     <GroupBox.Header>
                         <RadioButton x:Name="Slot1Selector"
                                      GroupName="ActiveSlot"
@@ -40,94 +41,41 @@
                                      IsChecked="True"/>
                     </GroupBox.Header>
 
-                    <StackPanel Margin="10">
-
-                        <TextBlock Text="Hair"/>
-
-                        <ComboBox x:Name="Slot1Hair"/>
-
-                        <TextBlock Text="Color"
-                                   Margin="0,10,0,0"/>
-
-                        <ComboBox x:Name="Slot1Color"/>
-
-                    </StackPanel>
-
+                    <TextBlock Margin="10"
+                               Text="Custom Hairstyle 1"/>
                 </GroupBox>
 
-                <!-- Slot 2 -->
-
                 <GroupBox Margin="0,0,0,10">
-
                     <GroupBox.Header>
                         <RadioButton x:Name="Slot2Selector"
                                      GroupName="ActiveSlot"
                                      Content="Slot 2"/>
                     </GroupBox.Header>
 
-                    <StackPanel Margin="10">
-
-                        <TextBlock Text="Hair"/>
-
-                        <ComboBox x:Name="Slot2Hair"/>
-
-                        <TextBlock Text="Color"
-                                   Margin="0,10,0,0"/>
-
-                        <ComboBox x:Name="Slot2Color"/>
-
-                    </StackPanel>
-
+                    <TextBlock Margin="10"
+                               Text="Custom Hairstyle 2"/>
                 </GroupBox>
 
-                <!-- Slot 3 -->
-
                 <GroupBox Margin="0,0,0,10">
-
                     <GroupBox.Header>
                         <RadioButton x:Name="Slot3Selector"
                                      GroupName="ActiveSlot"
                                      Content="Slot 3"/>
                     </GroupBox.Header>
 
-                    <StackPanel Margin="10">
-
-                        <TextBlock Text="Hair"/>
-
-                        <ComboBox x:Name="Slot3Hair"/>
-
-                        <TextBlock Text="Color"
-                                   Margin="0,10,0,0"/>
-
-                        <ComboBox x:Name="Slot3Color"/>
-
-                    </StackPanel>
-
+                    <TextBlock Margin="10"
+                               Text="Custom Hairstyle 3"/>
                 </GroupBox>
 
-                <!-- Slot 4 -->
-
                 <GroupBox Margin="0,0,0,20">
-
                     <GroupBox.Header>
                         <RadioButton x:Name="Slot4Selector"
                                      GroupName="ActiveSlot"
                                      Content="Slot 4"/>
                     </GroupBox.Header>
 
-                    <StackPanel Margin="10">
-
-                        <TextBlock Text="Hair"/>
-
-                        <ComboBox x:Name="Slot4Hair"/>
-
-                        <TextBlock Text="Color"
-                                   Margin="0,10,0,0"/>
-
-                        <ComboBox x:Name="Slot4Color"/>
-
-                    </StackPanel>
-
+                    <TextBlock Margin="10"
+                               Text="Custom Hairstyle 4"/>
                 </GroupBox>
 
                 <Button x:Name="ExportButton"
@@ -156,16 +104,9 @@
                     <Grid Width="320"
                           Height="320">
 
-                        <!-- Furthest Back -->
                         <Image x:Name="PreviewBack"/>
-
-                        <!-- Trainer -->
                         <Image x:Name="PreviewBody"/>
-
-                        <!-- Main Hair -->
                         <Image x:Name="PreviewBase"/>
-
-                        <!-- Bangs -->
                         <Image x:Name="PreviewBangs"/>
 
                     </Grid>
@@ -188,8 +129,6 @@
 
                 <StackPanel Margin="10">
 
-                    <!-- Bangs -->
-
                     <TextBlock Text="Bangs"
                                FontWeight="Bold"/>
 
@@ -210,8 +149,6 @@
 
                     </StackPanel>
 
-                    <!-- Base -->
-
                     <TextBlock Text="Base Hair"
                                FontWeight="Bold"/>
 
@@ -231,8 +168,6 @@
                                   Width="90"/>
 
                     </StackPanel>
-
-                    <!-- Back -->
 
                     <TextBlock Text="Back Hair"
                                FontWeight="Bold"/>
