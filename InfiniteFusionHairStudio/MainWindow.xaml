@@ -156,9 +156,17 @@
                     <Grid Width="320"
                           Height="320">
 
+                        <!-- Furthest Back -->
+                        <Image x:Name="PreviewBack"/>
+
+                        <!-- Trainer -->
                         <Image x:Name="PreviewBody"/>
 
-                        <Image x:Name="PreviewHair"/>
+                        <!-- Main Hair -->
+                        <Image x:Name="PreviewBase"/>
+
+                        <!-- Bangs -->
+                        <Image x:Name="PreviewBangs"/>
 
                     </Grid>
 
@@ -176,36 +184,79 @@
                   Header="Hair Composer"
                   Margin="20,0,0,0">
 
-            <StackPanel Margin="10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-                <TextBlock Text="Coming in Version 2"
-                           FontWeight="Bold"
-                           Margin="0,0,0,15"/>
+                <StackPanel Margin="10">
 
-                <Button Content="Bangs"
-                        IsEnabled="False"
-                        Margin="0,0,0,8"/>
+                    <!-- Bangs -->
 
-                <Button Content="Side Hair"
-                        IsEnabled="False"
-                        Margin="0,0,0,8"/>
+                    <TextBlock Text="Bangs"
+                               FontWeight="Bold"/>
 
-                <Button Content="Back Hair"
-                        IsEnabled="False"
-                        Margin="0,0,0,8"/>
+                    <ComboBox x:Name="ComposerBangs"
+                              Margin="0,5,0,5"/>
 
-                <Button Content="Ponytail"
-                        IsEnabled="False"
-                        Margin="0,0,0,8"/>
+                    <TextBlock Text="Color"/>
 
-                <Button Content="Cowlick"
-                        IsEnabled="False"
-                        Margin="0,0,0,8"/>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,5,0,20">
 
-                <Button Content="Accessories"
-                        IsEnabled="False"/>
+                        <ComboBox x:Name="ComposerBangsColor"
+                                  Width="120"
+                                  Margin="0,0,8,0"/>
 
-            </StackPanel>
+                        <ComboBox x:Name="ComposerBangsShade"
+                                  Width="90"/>
+
+                    </StackPanel>
+
+                    <!-- Base -->
+
+                    <TextBlock Text="Base Hair"
+                               FontWeight="Bold"/>
+
+                    <ComboBox x:Name="ComposerBase"
+                              Margin="0,5,0,5"/>
+
+                    <TextBlock Text="Color"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,5,0,20">
+
+                        <ComboBox x:Name="ComposerBaseColor"
+                                  Width="120"
+                                  Margin="0,0,8,0"/>
+
+                        <ComboBox x:Name="ComposerBaseShade"
+                                  Width="90"/>
+
+                    </StackPanel>
+
+                    <!-- Back -->
+
+                    <TextBlock Text="Back Hair"
+                               FontWeight="Bold"/>
+
+                    <ComboBox x:Name="ComposerBack"
+                              Margin="0,5,0,5"/>
+
+                    <TextBlock Text="Color"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,5,0,20">
+
+                        <ComboBox x:Name="ComposerBackColor"
+                                  Width="120"
+                                  Margin="0,0,8,0"/>
+
+                        <ComboBox x:Name="ComposerBackShade"
+                                  Width="90"/>
+
+                    </StackPanel>
+
+                </StackPanel>
+
+            </ScrollViewer>
 
         </GroupBox>
 
