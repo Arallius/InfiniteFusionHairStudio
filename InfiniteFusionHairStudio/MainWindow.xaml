@@ -104,10 +104,17 @@
                     <Grid Width="320"
                           Height="320">
 
-                        <Image x:Name="PreviewBack"/>
-                        <Image x:Name="PreviewBody"/>
-                        <Image x:Name="PreviewBase"/>
-                        <Image x:Name="PreviewBangs"/>
+                        <Image x:Name="PreviewBack"
+       Stretch="Fill"/>
+
+                        <Image x:Name="PreviewBody"
+       Stretch="Fill"/>
+
+                        <Image x:Name="PreviewBase"
+       Stretch="Fill"/>
+
+                        <Image x:Name="PreviewBangs"
+       Stretch="Fill"/>
 
                     </Grid>
 
