@@ -32,46 +32,19 @@ namespace InfiniteFusionHairStudio.Core
             _bodyImage.Source = LoadBitmap(imagePath);
         }
 
-        public void SetBack(
-            string imagePath,
-            HairColor color,
-            HairShade shade)
+        public void SetBack(BitmapSource bitmap)
         {
-            if (!File.Exists(imagePath))
-                return;
-
-            _backImage.Source = PaletteManager.Recolor(
-                LoadBitmap(imagePath),
-                color,
-                shade);
+            _backImage.Source = bitmap;
         }
 
-        public void SetBase(
-            string imagePath,
-            HairColor color,
-            HairShade shade)
+        public void SetBase(BitmapSource bitmap)
         {
-            if (!File.Exists(imagePath))
-                return;
-
-            _baseImage.Source = PaletteManager.Recolor(
-                LoadBitmap(imagePath),
-                color,
-                shade);
+            _baseImage.Source = bitmap;
         }
 
-        public void SetBangs(
-            string imagePath,
-            HairColor color,
-            HairShade shade)
+        public void SetBangs(BitmapSource bitmap)
         {
-            if (!File.Exists(imagePath))
-                return;
-
-            _bangsImage.Source = PaletteManager.Recolor(
-                LoadBitmap(imagePath),
-                color,
-                shade);
+            _bangsImage.Source = bitmap;
         }
 
         private static BitmapImage LoadBitmap(string path)

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.IO.Compression;
+using System.Windows.Media.Imaging;
 
 namespace InfiniteFusionHairStudio.Core
 {
@@ -21,6 +22,8 @@ namespace InfiniteFusionHairStudio.Core
                 File.Delete(zipPath);
             }
 
+            SpriteComposer composer = new();
+
             using ZipArchive archive =
                 ZipFile.Open(zipPath, ZipArchiveMode.Create);
 
@@ -28,6 +31,7 @@ namespace InfiniteFusionHairStudio.Core
             {
                 ExportSlot(
                     archive,
+                    composer,
                     replaceHair,
                     slots[i],
                     i + 1);
@@ -36,38 +40,52 @@ namespace InfiniteFusionHairStudio.Core
 
         private static void ExportSlot(
             ZipArchive archive,
+            SpriteComposer composer,
             HairAsset replaceHair,
             ExportSlot slot,
             int slotNumber)
         {
-            AddFile(
+            BitmapSource overworld =
+                composer.ComposeOverworld(slot);
+
+            BitmapSource trainer =
+                composer.ComposeTrainer(slot);
+
+            AddBitmap(
                 archive,
-                Path.Combine(
-                    slot.Hair.FolderPath,
-                    $"hair_{slotNumber}_{slot.Hair.FilePrefix}.png"),
+                overworld,
                 $"hair_{slotNumber}_{replaceHair.FilePrefix}.png");
 
-            AddFile(
+            AddBitmap(
                 archive,
-                Path.Combine(
-                    slot.Hair.FolderPath,
-                    $"hair_trainer_{slotNumber}_{slot.Hair.FilePrefix}.png"),
+                trainer,
                 $"hair_trainer_{slotNumber}_{replaceHair.FilePrefix}.png");
         }
 
-        private static void AddFile(
+        private static void AddBitmap(
             ZipArchive archive,
-            string sourceFile,
+            BitmapSource bitmap,
             string zipFileName)
         {
             var entry = archive.CreateEntry(
                 zipFileName,
                 CompressionLevel.Optimal);
 
-            using var input = File.OpenRead(sourceFile);
-            using var output = entry.Open();
+            PngBitmapEncoder encoder = new();
 
-            input.CopyTo(output);
+            encoder.Frames.Add(
+                BitmapFrame.Create(bitmap));
+
+            using MemoryStream memory = new();
+
+            encoder.Save(memory);
+
+            memory.Position = 0;
+
+            using Stream output =
+                entry.Open();
+
+            memory.CopyTo(output);
         }
     }
 }

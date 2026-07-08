@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace InfiniteFusionHairStudio
 {
@@ -13,6 +14,8 @@ namespace InfiniteFusionHairStudio
         private PreviewRenderer? _preview;
         private HairLibrary? _hairLibrary;
         private ComposerLibrary? _composerLibrary;
+        private readonly SpriteComposer _spriteComposer =
+    new SpriteComposer();
 
         private readonly List<SlotEditor> _slots = new();
 
@@ -58,10 +61,10 @@ namespace InfiniteFusionHairStudio
             InitializeComponent();
 
             _preview = new PreviewRenderer(
-                PreviewBack,
-                PreviewBody,
-                PreviewBase,
-                PreviewBangs);
+    PreviewBack,
+    PreviewBody,
+    PreviewBase,
+    PreviewBangs);
 
             string libraryPath = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
@@ -185,41 +188,22 @@ namespace InfiniteFusionHairStudio
         private void UpdatePreviewHair()
         {
             var active = GetActiveSlot();
-            PreviewGroup.Header = $"Live Preview — Slot {active.SlotNumber}";
 
-            HairColor backColor = (HairColor)ComposerBackColor.SelectedItem;
-            HairShade backShade = (HairShade)ComposerBackShade.SelectedItem;
+            PreviewGroup.Header =
+                $"Live Preview — Slot {active.SlotNumber}";
 
-            HairColor baseColor = (HairColor)ComposerBaseColor.SelectedItem;
-            HairShade baseShade = (HairShade)ComposerBaseShade.SelectedItem;
+            ExportSlot slot = GetActiveExportSlot();
 
-            HairColor bangsColor = (HairColor)ComposerBangsColor.SelectedItem;
-            HairShade bangsShade = (HairShade)ComposerBangsShade.SelectedItem;
+            _preview?.SetBack(
+                _spriteComposer.ComposeBack(slot));
 
-            if (ComposerBack.SelectedItem is HairPart back)
-            {
-                _preview?.SetBack(
-                    back.TrainerImagePath,
-                    backColor,
-                    backShade);
-            }
+            _preview?.SetBase(
+                _spriteComposer.ComposeBase(slot));
 
-            if (ComposerBase.SelectedItem is HairPart hairBase)
-            {
-                _preview?.SetBase(
-                    hairBase.TrainerImagePath,
-                    baseColor,
-                    baseShade);
-            }
-
-            if (ComposerBangs.SelectedItem is HairPart bangs)
-            {
-                _preview?.SetBangs(
-                    bangs.TrainerImagePath,
-                    bangsColor,
-                    bangsShade);
-            }
+            _preview?.SetBangs(
+                _spriteComposer.ComposeBangs(slot));
         }
+
 
         private void ComposerSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
