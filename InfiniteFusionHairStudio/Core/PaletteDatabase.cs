@@ -29,115 +29,137 @@ namespace InfiniteFusionHairStudio.Core
 
         private static ColorPalette GetBrown(HairShade shade)
         {
-            return shade switch
-            {
-                HairShade.Light => new ColorPalette(
-                    Color.FromRgb(176, 115, 82),
-                    Color.FromRgb(222, 174, 125),
-                    Color.FromRgb(239, 207, 154),
-                    Color.FromRgb(255, 236, 170)
-                ),
+            ColorPalette light = new(
+                Color.FromRgb(176, 115, 82),
+                Color.FromRgb(222, 174, 125),
+                Color.FromRgb(239, 207, 154),
+                Color.FromRgb(255, 236, 170));
 
-                HairShade.Normal => new ColorPalette(
-                    Color.FromRgb(143, 92, 63),
-                    Color.FromRgb(214, 167, 118),
-                    Color.FromRgb(230, 199, 147),
-                    Color.FromRgb(245, 226, 142)
-                ),
+            ColorPalette normal = new(
+                Color.FromRgb(143, 92, 63),
+                Color.FromRgb(214, 167, 118),
+                Color.FromRgb(230, 199, 147),
+                Color.FromRgb(245, 226, 142));
 
-                HairShade.Dark => new ColorPalette(
-                    Color.FromRgb(92, 56, 40),
-                    Color.FromRgb(148, 103, 73),
-                    Color.FromRgb(183, 146, 106),
-                    Color.FromRgb(214, 185, 137)
-                ),
+            ColorPalette dark = new(
+                Color.FromRgb(92, 56, 40),
+                Color.FromRgb(148, 103, 73),
+                Color.FromRgb(183, 146, 106),
+                Color.FromRgb(214, 185, 137));
 
-                _ => throw new ArgumentOutOfRangeException(nameof(shade))
-            };
+            return InterpolatePalette(
+                shade,
+                light,
+                normal,
+                dark);
         }
 
         private static ColorPalette GetBlack(HairShade shade)
         {
-            return shade switch
-            {
-                HairShade.Light => new ColorPalette(
-                    Color.FromRgb(55, 55, 55),
-                    Color.FromRgb(95, 95, 95),
-                    Color.FromRgb(145, 145, 145),
-                    Color.FromRgb(205, 205, 205)
-                ),
+            ColorPalette light = new(
+                Color.FromRgb(55, 55, 55),
+                Color.FromRgb(95, 95, 95),
+                Color.FromRgb(145, 145, 145),
+                Color.FromRgb(205, 205, 205));
 
-                HairShade.Normal => new ColorPalette(
-                    Color.FromRgb(30, 30, 30),
-                    Color.FromRgb(70, 70, 70),
-                    Color.FromRgb(120, 120, 120),
-                    Color.FromRgb(185, 185, 185)
-                ),
+            ColorPalette normal = new(
+                Color.FromRgb(30, 30, 30),
+                Color.FromRgb(70, 70, 70),
+                Color.FromRgb(120, 120, 120),
+                Color.FromRgb(185, 185, 185));
 
-                HairShade.Dark => new ColorPalette(
-                    Color.FromRgb(10, 10, 10),
-                    Color.FromRgb(35, 35, 35),
-                    Color.FromRgb(75, 75, 75),
-                    Color.FromRgb(130, 130, 130)
-                ),
+            ColorPalette dark = new(
+                Color.FromRgb(10, 10, 10),
+                Color.FromRgb(35, 35, 35),
+                Color.FromRgb(75, 75, 75),
+                Color.FromRgb(130, 130, 130));
 
-                _ => throw new ArgumentOutOfRangeException(nameof(shade))
-            };
+            return InterpolatePalette(
+                shade,
+                light,
+                normal,
+                dark);
         }
 
         private static ColorPalette GetBlonde(HairShade shade) =>
             Build(shade,
-                Color.FromRgb(255, 225, 130),
-                Color.FromRgb(235, 205, 90),
-                Color.FromRgb(190, 155, 55));
+                Color.FromRgb(245, 215, 125),
+                Color.FromRgb(220, 185, 90),
+                Color.FromRgb(175, 140, 55));
 
         private static ColorPalette GetPurple(HairShade shade) =>
             Build(shade,
-                Color.FromRgb(185, 130, 255),
-                Color.FromRgb(130, 70, 210),
-                Color.FromRgb(80, 35, 140));
+                Color.FromRgb(170, 120, 235),
+                Color.FromRgb(120, 65, 185),
+                Color.FromRgb(75, 35, 120));
 
         private static ColorPalette GetRed(HairShade shade) =>
             Build(shade,
-                Color.FromRgb(255, 120, 120),
-                Color.FromRgb(205, 55, 55),
-                Color.FromRgb(130, 25, 25));
+                Color.FromRgb(225, 110, 110),
+                Color.FromRgb(180, 55, 55),
+                Color.FromRgb(115, 25, 25));
 
         private static ColorPalette GetPink(HairShade shade) =>
             Build(shade,
-                Color.FromRgb(255, 190, 220),
-                Color.FromRgb(235, 115, 170),
-                Color.FromRgb(180, 65, 120));
+                Color.FromRgb(240, 175, 205),
+                Color.FromRgb(210, 110, 155),
+                Color.FromRgb(160, 65, 110));
 
         private static ColorPalette GetBlue(HairShade shade) =>
             Build(shade,
-                Color.FromRgb(135, 190, 255),
-                Color.FromRgb(65, 120, 220),
-                Color.FromRgb(35, 65, 145));
+                Color.FromRgb(125, 175, 235),
+                Color.FromRgb(60, 110, 195),
+                Color.FromRgb(35, 60, 130));
 
         private static ColorPalette GetGreen(HairShade shade) =>
             Build(shade,
-                Color.FromRgb(145, 235, 145),
-                Color.FromRgb(65, 170, 65),
-                Color.FromRgb(35, 105, 35));
+                Color.FromRgb(135, 215, 135),
+                Color.FromRgb(60, 145, 60),
+                Color.FromRgb(35, 90, 35));
 
         private static ColorPalette GetWhite(HairShade shade) =>
             Build(shade,
-                Color.FromRgb(255, 255, 255),
-                Color.FromRgb(225, 225, 225),
-                Color.FromRgb(185, 185, 185));
+                Color.FromRgb(250, 248, 245),
+                Color.FromRgb(225, 223, 220),
+                Color.FromRgb(185, 183, 180));
 
         private static ColorPalette GetSilver(HairShade shade) =>
             Build(shade,
-                Color.FromRgb(230, 230, 240),
-                Color.FromRgb(175, 175, 190),
-                Color.FromRgb(120, 120, 140));
+                Color.FromRgb(220, 222, 230),
+                Color.FromRgb(170, 172, 185),
+                Color.FromRgb(115, 118, 135));
 
         private static ColorPalette GetOrange(HairShade shade) =>
             Build(shade,
-                Color.FromRgb(255, 190, 120),
-                Color.FromRgb(235, 130, 45),
-                Color.FromRgb(170, 75, 15));
+                Color.FromRgb(240, 175, 110),
+                Color.FromRgb(215, 120, 50),
+                Color.FromRgb(150, 70, 20));
+
+        private static ColorPalette InterpolatePalette(
+            HairShade shade,
+            ColorPalette light,
+            ColorPalette normal,
+            ColorPalette dark)
+        {
+            return shade switch
+            {
+                HairShade.Light => light,
+
+                HairShade.Lightish => Blend(
+                    light,
+                    normal),
+
+                HairShade.Normal => normal,
+
+                HairShade.Darkish => Blend(
+                    normal,
+                    dark),
+
+                HairShade.Dark => dark,
+
+                _ => throw new ArgumentOutOfRangeException(nameof(shade))
+            };
+        }
 
         private static ColorPalette Build(
             HairShade shade,
@@ -148,16 +170,44 @@ namespace InfiniteFusionHairStudio.Core
             return shade switch
             {
                 HairShade.Light => new ColorPalette(
-                    Lighten(light, 35),
-                    Lighten(light, 20),
-                    Lighten(light, 10),
-                    Lighten(light, 50)),
+                    Lighten(light, 25),
+                    Lighten(light, 12),
+                    light,
+                    Lighten(light, 40)),
+
+                HairShade.Lightish => new ColorPalette(
+                    Midpoint(
+                        Darken(normal, 40),
+                        Lighten(light, 25)),
+                    Midpoint(
+                        normal,
+                        light),
+                    Midpoint(
+                        Lighten(normal, 25),
+                        Lighten(light, 20)),
+                    Midpoint(
+                        Lighten(normal, 50),
+                        Lighten(light, 40))),
 
                 HairShade.Normal => new ColorPalette(
                     Darken(normal, 40),
                     normal,
                     Lighten(normal, 25),
                     Lighten(normal, 50)),
+
+                HairShade.Darkish => new ColorPalette(
+                    Midpoint(
+                        Darken(dark, 50),
+                        Darken(normal, 40)),
+                    Midpoint(
+                        Darken(dark, 25),
+                        normal),
+                    Midpoint(
+                        dark,
+                        Lighten(normal, 25)),
+                    Midpoint(
+                        Lighten(dark, 25),
+                        Lighten(normal, 50))),
 
                 HairShade.Dark => new ColorPalette(
                     Darken(dark, 50),
@@ -167,6 +217,27 @@ namespace InfiniteFusionHairStudio.Core
 
                 _ => throw new ArgumentOutOfRangeException(nameof(shade))
             };
+        }
+
+        private static ColorPalette Blend(
+            ColorPalette a,
+            ColorPalette b)
+        {
+            return new ColorPalette(
+                Midpoint(a.Dark, b.Dark),
+                Midpoint(a.Mid, b.Mid),
+                Midpoint(a.Light, b.Light),
+                Midpoint(a.Highlight, b.Highlight));
+        }
+
+        private static Color Midpoint(
+            Color a,
+            Color b)
+        {
+            return Color.FromRgb(
+                (byte)((a.R + b.R) / 2),
+                (byte)((a.G + b.G) / 2),
+                (byte)((a.B + b.B) / 2));
         }
 
         private static Color Lighten(

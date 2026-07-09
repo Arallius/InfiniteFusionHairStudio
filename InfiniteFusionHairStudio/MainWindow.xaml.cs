@@ -50,11 +50,13 @@ namespace InfiniteFusionHairStudio
 
         // New Composer shade list.
         private readonly HairShade[] _hairShades =
-        {
-            HairShade.Light,
-            HairShade.Normal,
-            HairShade.Dark
-        };
+{
+    HairShade.Light,
+    HairShade.Lightish,
+    HairShade.Normal,
+    HairShade.Darkish,
+    HairShade.Dark
+};
 
         public MainWindow()
         {
