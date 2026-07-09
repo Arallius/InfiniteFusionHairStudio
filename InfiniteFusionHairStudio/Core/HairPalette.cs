@@ -18,7 +18,9 @@
     public enum HairShade
     {
         Light,
+        Lightish,
         Normal,
+        Darkish,
         Dark
     }
 
